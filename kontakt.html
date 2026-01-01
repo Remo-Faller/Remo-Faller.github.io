@@ -1,0 +1,347 @@
+<!doctype html>
+
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Formularz Kontaktowy</title>
+  <meta name="color-scheme" content="light dark" />
+  <style>
+    :root {
+      --bg: #0f172a;          /* slate-900 */
+      --card: #0b1229cc;      /* translucent */
+      --fg: #e2e8f0;          /* slate-200 */
+      --muted: #94a3b8;       /* slate-400 */
+      --ring: #7c3aed;        /* violet-600 */
+      --accent: #8b5cf6;      /* violet-500 */
+      --accent-2: #06b6d4;    /* cyan-500 */
+      --error: #ef4444;       /* red-500 */
+      --success: #10b981;     /* emerald-500 */
+      --radius: 18px;
+    }@media (prefers-color-scheme: light) {
+  :root {
+    --bg: #f8fafc;        /* slate-50 */
+    --card: #ffffffee;
+    --fg: #0f172a;        /* slate-900 */
+    --muted: #475569;     /* slate-600 */
+    --ring: #7c3aed;
+    --accent: #6d28d9;    /* violet-700 */
+    --accent-2: #0e7490;  /* cyan-700 */
+  }
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  color: var(--fg);
+  background: radial-gradient(1200px 700px at 10% 10%, rgba(124,58,237,.25), transparent 50%),
+              radial-gradient(1200px 700px at 90% 30%, rgba(6,182,212,.18), transparent 55%),
+              radial-gradient(1000px 500px at 50% 100%, rgba(139,92,246,.18), transparent 60%),
+              var(--bg);
+  display: grid;
+  place-items: center;
+  padding: 32px 16px;
+}
+
+.card {
+  width: 100%;
+  max-width: 860px;
+  background: var(--card);
+  border: 1px solid rgba(148,163,184,.25);
+  border-radius: var(--radius);
+  box-shadow: 0 20px 50px rgba(2,6,23,.35), inset 0 1px 0 rgba(255,255,255,.04);
+  backdrop-filter: blur(10px) saturate(120%);
+  -webkit-backdrop-filter: blur(10px) saturate(120%);
+  overflow: hidden;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.15fr .85fr;
+}
+@media (max-width: 900px) {
+  .grid { grid-template-columns: 1fr; }
+  .aside { display: none; }
+}
+
+.header {
+  padding: 28px 28px 0 28px;
+}
+.title {
+  font-size: clamp(22px, 2.2vw, 30px);
+  margin: 0 0 6px 0;
+  letter-spacing: -0.02em;
+}
+.subtitle {
+  margin: 0 0 18px 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+form { padding: 0 28px 28px 28px; }
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 640px) { .row { grid-template-columns: 1fr; } }
+
+.field {
+  position: relative;
+}
+.control {
+  width: 100%;
+  padding: 22px 44px 10px 46px; /* room for icon + label */
+  border: 1px solid rgba(148,163,184,.35);
+  background: rgba(15,23,42,.35);
+  color: var(--fg);
+  border-radius: 14px;
+  outline: none;
+  transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+}
+@media (prefers-color-scheme: light) {
+  .control { background: rgba(255,255,255,.9); }
+}
+
+.control::placeholder { color: transparent; }
+
+.control:focus {
+  border-color: var(--ring);
+  box-shadow: 0 0 0 4px rgba(124,58,237,.18);
+  background: rgba(15,23,42,.5);
+}
+@media (prefers-color-scheme: light) {
+  .control:focus { background: #fff; }
+}
+
+.label {
+  position: absolute;
+  left: 46px; top: 12px;
+  font-size: 12px;
+  color: var(--muted);
+  pointer-events: none;
+  transition: transform .15s ease, opacity .15s ease;
+  transform-origin: left top;
+}
+
+.control:placeholder-shown + .label {
+  transform: translateY(12px) scale(1.05);
+  opacity: .85;
+}
+
+.icon {
+  position: absolute;
+  left: 14px; top: 50%; transform: translateY(-50%);
+  width: 20px; height: 20px;
+  opacity: .75;
+  pointer-events: none;
+}
+
+textarea.control { min-height: 140px; resize: vertical; padding-top: 28px; }
+
+.hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+
+.actions { display: flex; align-items: center; gap: 12px; margin-top: 6px; }
+
+.btn {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border: 0; cursor: pointer; border-radius: 999px;
+  color: white; font-weight: 600; letter-spacing: .2px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  box-shadow: 0 8px 22px rgba(124,58,237,.35);
+  transition: transform .06s ease, box-shadow .2s ease;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(124,58,237,.42); }
+.btn:active { transform: translateY(0); box-shadow: 0 8px 22px rgba(124,58,237,.35); }
+.btn[disabled] { opacity: .7; cursor: not-allowed; }
+
+.spinner { width: 16px; height: 16px; border-radius: 50%; border: 2px solid rgba(255,255,255,.35); border-top-color: white; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.checkbox {
+  display: grid; grid-template-columns: 20px 1fr; gap: 10px; align-items: start;
+  margin: 8px 0 0 2px;
+  font-size: 14px; color: var(--muted);
+}
+
+.aside {
+  padding: 28px; border-left: 1px dashed rgba(148,163,184,.35);
+  background: linear-gradient(180deg, rgba(124,58,237,.08), transparent 30%),
+              linear-gradient(180deg, rgba(6,182,212,.08), transparent 60%);
+}
+.aside h3 { margin: 0 0 8px; font-size: 16px; opacity: .9; }
+.aside ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; }
+.aside li { margin: 6px 0; }
+
+.toast {
+  display: none;
+  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+  background: #0a2017cc; color: #ecfdf5; border: 1px solid rgba(16,185,129,.4);
+  padding: 12px 16px; border-radius: 12px; box-shadow: 0 10px 30px rgba(2,6,23,.45);
+  backdrop-filter: blur(8px);
+}
+.toast.error { background: #2a0f0fcc; color: #fee2e2; border-color: rgba(239,68,68,.45); }
+.toast.show { display: inline-flex; align-items: center; gap: 8px; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="grid">
+      <div>
+        <div class="header">
+          <h1 class="title">Masz pytanie? Napisz do nas ✉️</h1>
+          <p class="subtitle">Wypełnij formularz, a odpowiemy tak szybko, jak to możliwe. Pola oznaczone * są wymagane.</p>
+        </div><!--
+      ➜ Jak podłączyć do backendu/Formspree/Netlify?
+        - Podmień atrybut action na adres endpointu (np. https://formspree.io/f/XYZ)
+        - Usuń data-demo="true" (lub pozostaw, jeśli chcesz tryb demonstracyjny)
+        - Opcjonalnie zachowaj data-ajax="true" dla wysyłki bez przeładowania strony
+    -->
+    <form id="contactForm" action="#" method="POST" data-ajax="true" data-demo="true" novalidate>
+      <div class="row">
+        <div class="field">
+          <input class="control" id="name" name="name" type="text" placeholder="Imię i nazwisko" required autocomplete="name" />
+          <label class="label" for="name">Imię i nazwisko *</label>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-5.33 0-8 2.67-8 6a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1c0-3.33-2.67-6-8-6Z"/></svg>
+        </div>
+        <div class="field">
+          <input class="control" id="email" name="email" type="email" placeholder="Adres e-mail" required autocomplete="email" />
+          <label class="label" for="email">Adres e‑mail *</label>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M2 6a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v.4l-10 6.25L2 6.4Zm0 3.21V18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9.21l-9.4 5.88a2 2 0 0 1-2.2 0Z"/></svg>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <input class="control" id="phone" name="phone" type="tel" placeholder="Numer telefonu (opcjonalnie)" inputmode="tel" autocomplete="tel" />
+          <label class="label" for="phone">Numer telefonu (opcjonalnie)</label>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6.6 10.8a15.9 15.9 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1.1-.24 12.7 12.7 0 0 0 4 1 1 1 0 0 1 1 .99V20a2 2 0 0 1-2 2A18 18 0 0 1 2 6a2 2 0 0 1 2-2h2.05a1 1 0 0 1 1 .95 12.7 12.7 0 0 0 1 4 1 1 0 0 1-.24 1.09Z"/></svg>
+        </div>
+        <div class="field">
+          <input class="control" id="subject" name="subject" type="text" placeholder="Temat" required />
+          <label class="label" for="subject">Temat *</label>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M4 6a2 2 0 0 1 2-2h7l5 5v9a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Zm9-1v3a1 1 0 0 0 1 1h3"/></svg>
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:14px">
+        <textarea class="control" id="message" name="message" placeholder="Twoja wiadomość" required></textarea>
+        <label class="label" for="message">Wiadomość *</label>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M21 11a1 1 0 0 1-1 1H8l-5 5V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2Z"/></svg>
+        <div class="hint">Postaraj się streścić temat w kilku zdaniach.</div>
+      </div>
+
+      <!-- Honeypot (anty-spam) -->
+      <div aria-hidden="true" style="position:absolute; left:-10000px; top:auto; width:1px; height:1px; overflow:hidden;">
+        <label for="website">Zostaw to pole puste</label>
+        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <label class="checkbox">
+        <input type="checkbox" id="consent" name="consent" required aria-required="true" />
+        <span>Wyrażam zgodę na przetwarzanie moich danych osobowych zgodnie z <a href="#" target="_blank" rel="noopener">Polityką prywatności</a>. *</span>
+      </label>
+
+      <div class="actions">
+        <button type="submit" class="btn" id="submitBtn">
+          <span class="btn-text">Wyślij wiadomość</span>
+        </button>
+        <div class="hint" id="statusHint" role="status" aria-live="polite"></div>
+      </div>
+    </form>
+  </div>
+
+  <aside class="aside">
+    <h3>Dlaczego warto napisać?</h3>
+    <ul>
+      <li>Szybka odpowiedź w dni robocze</li>
+      <li>Indywidualna wycena i doradztwo</li>
+      <li>Wsparcie techniczne i UX/UI</li>
+    </ul>
+    <h3 style="margin-top:16px">Inne kanały</h3>
+    <ul>
+      <li>E‑mail: kontakt@faller-os.pl</li>
+      <li>Telefon: +48 190 120 940</li>
+    </ul>
+  </aside>
+</div>
+
+  </div>  <div id="toast" class="toast" role="alert" aria-live="assertive">
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm-1 14.5L6.5 12l1.4-1.4L11 13.7l5.7-5.7L18.1 9Z"/></svg>
+    <span id="toastMsg">Wiadomość wysłana. Dziękujemy!</span>
+  </div>  <script>
+    (function () {
+      const form = document.getElementById('contactForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const btnText = submitBtn.querySelector('.btn-text');
+      const statusHint = document.getElementById('statusHint');
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+
+      function setLoading(isLoading) {
+        submitBtn.disabled = isLoading;
+        btnText.innerHTML = isLoading ? '<span class="spinner" aria-hidden="true"></span> Wysyłanie…' : 'Wyślij wiadomość';
+      }
+      function showToast(message, isError) {
+        toast.classList.remove('error');
+        if (isError) toast.classList.add('error');
+        toastMsg.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 4000);
+      }
+
+      form.addEventListener('submit', async (e) => {
+        // Tryb demo: nie wysyła nic na serwer, pokazuje sukces po chwili.
+        const isDemo = form.hasAttribute('data-demo');
+        const useAjax = form.hasAttribute('data-ajax');
+
+        if (useAjax) e.preventDefault();
+        if (!useAjax) return; // klasyczne wysłanie bez JS
+
+        // Wbudowana walidacja przeglądarki
+        if (!form.checkValidity()) {
+          statusHint.textContent = 'Uzupełnij wymagane pola.';
+          return;
+        }
+
+        setLoading(true);
+        statusHint.textContent = '';
+
+        try {
+          if (isDemo) {
+            await new Promise(r => setTimeout(r, 900));
+            showToast('Wiadomość wysłana. Dziękujemy!', false);
+            form.reset();
+            return;
+          }
+
+          const endpoint = form.getAttribute('action');
+          const formData = new FormData(form);
+
+          const res = await fetch(endpoint, { method: 'POST', body: formData, headers: { 'Accept': 'application/json' } });
+          if (!res.ok) throw new Error('Błąd sieci');
+
+          showToast('Wiadomość wysłana. Dziękujemy!', false);
+          form.reset();
+        } catch (err) {
+          console.error(err);
+          showToast('Nie udało się wysłać wiadomości. Spróbuj ponownie później.', true);
+          statusHint.textContent = 'Problem techniczny — możesz też napisać na kontakt@twojadomena.pl';
+        } finally {
+          setLoading(false);
+        }
+      });
+    })();
+  </script></body>
+</html>

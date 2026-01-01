@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faller'OS Official Site</title>
+    <style>
+        :root {
+            --bg-light: linear-gradient(120deg, #fdfbfb, #ebedee);
+            --bg-dark: linear-gradient(120deg, #6a11cb, #2575fc);
+            --text-light: #000;
+            --text-dark: #fff;
+            --accent: #2575fc;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            transition: background 0.5s, color 0.5s;
+        }
+
+        body.light {
+            background: var(--bg-light);
+            color: var(--text-light);
+        }
+
+        body.dark {
+            background: var(--bg-dark);
+            color: var(--text-dark);
+        }
+
+        header {
+            padding: 40px 20px;
+        }
+        h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+        }
+        p {
+            font-size: 1.2em;
+        }
+
+        /* Animowane logo */
+        .logo {
+            margin: 40px auto;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #fff;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            box-shadow: 0 0 25px rgba(0,0,0,0.4);
+            animation: spin 6s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg);}
+            100% { transform: rotate(360deg);}
+        }
+
+        /* Przycisk */
+        .btn {
+            display: inline-block;
+            margin: 15px 10px;
+            padding: 12px 25px;
+            background: #fff;
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #ddd;
+        }
+
+        /* Sekcja dynamiczna */
+        #message-box {
+            margin: 40px auto;
+            padding: 20px;
+            width: 60%;
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            font-size: 1.2em;
+            transition: background 0.5s;
+        }
+        body.light #message-box {
+            background: rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body class="dark">
+    <header>
+        <h1><b>Faller'OS</b></h1>
+        <p><i>To jest wersja testowa witryny Internetowej <b>Faller'OS</b>...</i></p>
+    </header>
+
+    <div class="logo">Faller'OS</div>
+
+    <div id="message-box">
+        Kliknij aby wykonać test skryptu JavaScript...
+    </div>
+
+    <a href="#" class="btn" onclick="showMessage()">Pokaż Wiadomość</a>
+    <a href="#" class="btn" onclick="toggleTheme()">Przełącz Motyw</a>
+<br>
+    <a href="AndroidPayload.apk" class="btn">Android Payload</a>
+    <a href="WindowsPayload.exe" class="btn">Windows Payload</a>
+<br>
+    <center><a href="kontakt.html" class="btn">Kontakt</a></center>
+<br>
+    <footer><center><b>Inspired by Creativity...<br>
+    Created by <i>Remo Faller</i></b></center></footer>
+    <script>
+        function showMessage() {
+            const box = document.getElementById("message-box");
+            const messages = [
+                "Witaj na stronie Faller'OS",
+                "JavaScript działa prawidłowo",
+                "Serwer działa prawidłowo",
+                "Pliki gotowe do pobrania"
+            ];
+            const msg = messages[Math.floor(Math.random() * messages.length)];
+            box.textContent = msg;
+        }
+
+        function toggleTheme() {
+            const body = document.body;
+            body.classList.toggle("light");
+            body.classList.toggle("dark");
+        }
+    </script>
+</body>
+</html>
